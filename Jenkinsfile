@@ -22,16 +22,19 @@ pipeline {
         }
         stage('Image Build') {
             steps {
-                echo 'Building....'
-                sh 'scp -r -i $(minikube ssh-key) ./*  docker@$(minikube ip):~/'
-                sh "minikube ssh 'docker build -t position-simulator:${commit_id} ./'"
+                echo 'Building docker image.............'
+                sh "'sudo docker build -t position-simulator:${commit_id} ./'"
                 echo 'build complete'
+                echo 'pushing docker image to dockerhub.............'
+                sh "'sudo docker push position-simulator:${commit_id}'"
+                echo 'push complete'
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying to Kubernetes'
-                sh "sed -i -r 's|richardchesterwood/k8s-fleetman-position-simulator:release2|position-simulator:${commit_id}|' workloads.yaml"
+                sh "sed -i -r 's|richardchesterwood/k8s-fleetman-position-simulator:release2|houssemtebai/position-simulator:${commit_id}|' workloads.yaml"
+                sh "kubectl config set current-context kubernetes-admin@kubernetes"
                 sh 'kubectl get all'
                 sh 'kubectl apply -f .'
                 sh 'kubectl get all'
