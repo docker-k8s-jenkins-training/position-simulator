@@ -26,7 +26,7 @@ pipeline {
                 sh "docker build -t houssemtebai/position-simulator:'${commit_id}' ./"
                 echo 'build complete'
                 echo 'pushing docker image to dockerhub.............'
-                sh "sudo docker push houssemtebai/position-simulator:'${commit_id}'"
+                sh "docker push houssemtebai/position-simulator:'${commit_id}'"
                 echo 'push complete'
             }
         }
