@@ -9,7 +9,7 @@ pipeline {
             steps {
                 checkout scm
                 sh "git rev-parse --short HEAD > .git/commit-id"
-                sh "git tag > .git/tag"
+                sh "git tag --sort version:refname | tail -1 > .git/tag"
                 script {                        
                     commit_id = readFile('.git/commit-id').trim()
                     tag_id = readFile('.git/tag').trim()
