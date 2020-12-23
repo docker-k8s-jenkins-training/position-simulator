@@ -1,5 +1,4 @@
 def commit_id
-def tag_id
 pipeline {
     agent any
     
@@ -8,11 +7,11 @@ pipeline {
         stage('Preparation') {
             steps {
                 checkout scm
+                //sh "git rev-parse --short HEAD > .git/commit-id"
                 sh "git rev-parse --short HEAD > .git/commit-id"
-                sh "git tag --sort version:refname | tail -1 > .git/tag"
+                def tag_id = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
                 script {                        
                     commit_id = readFile('.git/commit-id').trim()
-                    tag_id = readFile('.git/tag').trim()
                 }
             }
         }
