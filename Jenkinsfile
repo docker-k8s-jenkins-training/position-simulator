@@ -1,5 +1,5 @@
 def commit_id
-def tag
+def tag-id
 pipeline {
     agent any
     
@@ -12,7 +12,7 @@ pipeline {
                 sh "git tag > .git/tag"
                 script {                        
                     commit_id = readFile('.git/commit-id').trim()
-                    tag = readFile('.git/tag').trim()
+                    tag-id = readFile('.git/tag').trim()
                 }
             }
         }
@@ -26,10 +26,10 @@ pipeline {
         stage('Image Build') {
             steps {
                 echo 'Building docker image.............'
-                sh "docker build -t houssemtebai/position-simulator:v0.9 ./"
+                sh "docker build -t houssemtebai/position-simulator:'${tag-id}' ./"
                 echo 'build complete'
                 echo 'pushing docker image to dockerhub.............'
-                sh "docker push houssemtebai/position-simulator:v0.9"
+                sh "docker push houssemtebai/position-simulator:'${tag-id}'"
                 echo 'push complete'
             }
         }
