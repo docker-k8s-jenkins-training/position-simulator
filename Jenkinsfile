@@ -7,9 +7,7 @@ pipeline {
         stage('Preparation') {
             steps {
                 checkout scm
-                //sh "git rev-parse --short HEAD > .git/commit-id"
                 sh "git rev-parse --short HEAD > .git/commit-id"
-                def tag_id = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
                 script {                        
                     commit_id = readFile('.git/commit-id').trim()
                 }
@@ -25,10 +23,10 @@ pipeline {
         stage('Image Build') {
             steps {
                 echo 'Building docker image.............'
-                sh "docker build -t houssemtebai/position-simulator:'${tag_id}' ./"
+                sh "docker build -t houssemtebai/position-simulator:'${commit_id}' ./"
                 echo 'build complete'
                 echo 'pushing docker image to dockerhub.............'
-                sh "docker push houssemtebai/position-simulator:'${tag_id}'"
+                sh "docker push houssemtebai/position-simulator:'${commit_id}'"
                 echo 'push complete'
             }
         }
