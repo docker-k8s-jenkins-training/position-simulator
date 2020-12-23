@@ -12,7 +12,7 @@ pipeline {
                 sh "git tag > .git/tag"
                 script {                        
                     commit_id = readFile('.git/commit-id').trim()
-                    tag = readFile('.git/tag')
+                    tag = readFile('.git/tag').trim()
                 }
             }
         }
