@@ -7,10 +7,7 @@ pipeline {
         stage('Preparation') {
             steps {
                 checkout scm
-                sh "git rev-parse --short HEAD > .git/commit-id"
-                script {                        
-                    commit_id = readFile('.git/commit-id').trim()
-                }
+                commit_id = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
             }
         }
         stage('Build') {
