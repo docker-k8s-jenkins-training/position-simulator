@@ -23,10 +23,10 @@ pipeline {
         stage('Image Build') {
             steps {
                 echo 'Building docker image.............'
-                sh "docker build -t houssemtebai/position-simulator:'${commit_id}' ./"
+                sh "docker build -t houssemtebai/position-simulator:'${tag}' ./"
                 echo 'build complete'
                 echo 'pushing docker image to dockerhub.............'
-                sh "docker push houssemtebai/position-simulator:'${commit_id}'"
+                sh "docker push houssemtebai/position-simulator:'${tag}'"
                 echo 'push complete'
             }
         }
