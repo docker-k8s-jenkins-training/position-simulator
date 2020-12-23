@@ -34,7 +34,7 @@ pipeline {
             steps {
                 echo 'Deploying to Kubernetes'
                 sh "sed -i -r 's|richardchesterwood/k8s-fleetman-position-simulator:release2|houssemtebai/position-simulator:${commit_id}|' workloads.yaml"
-                sh "kubectl config set current-context kubernetes-admin@kubernetes"
+                sh "kubectl config set current-context minikube"
                 sh 'kubectl get all'
                 sh 'kubectl apply -f .'
                 sh 'kubectl get all'
