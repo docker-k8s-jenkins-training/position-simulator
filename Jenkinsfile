@@ -13,6 +13,16 @@ pipeline {
                 }
             }
         }
+        stage('Code Quality') {
+            steps {
+                withSonarQubeEnv('code-quality'){
+                    sh 'mvn sonar:sonar \
+                        -Dsonar.projectKey=com.virtualpairprogrammers:positionsimulator \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=69b11aeb0f84d05ba2fc3872985207157753d75e'
+                }
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building....'
@@ -23,10 +33,10 @@ pipeline {
         stage('Image Build') {
             steps {
                 echo 'Building docker image.............'
-                sh "docker build -t houssemtebai/position-simulator:'${commit_id}' ./"
+                sh "'docker build -t houssemtebai/position-simulator:${commit_id} ./'"
                 echo 'build complete'
                 echo 'pushing docker image to dockerhub.............'
-                sh "docker push houssemtebai/position-simulator:'${commit_id}'"
+                sh "'docker push houssemtebai/position-simulator:${commit_id}'"
                 echo 'push complete'
             }
         }
